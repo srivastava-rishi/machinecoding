@@ -6,23 +6,28 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.rsstudio.machinecodinground.ui.theme.MachineCodingRoundTheme
+import androidx.navigation.compose.rememberNavController
+import com.rsstudio.machinecodinground.navigation.AppNavGraph
+import com.rsstudio.machinecodinground.navigation.AppNavigationActions
+import com.rsstudio.machinecodinground.presentation.theme.MachineCodingRoundTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MachineCodingRoundTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    ReminderApp(
+                        onFinish = {
+                            finish()
+                        }
+                    )
                 }
             }
         }
@@ -30,17 +35,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MachineCodingRoundTheme {
-        Greeting("Android")
+fun ReminderApp(
+    onFinish: () -> Unit
+) {
+    val navController = rememberNavController()
+    val navActions = remember(navController) {
+        AppNavigationActions(navController, onFinish)
     }
+    AppNavGraph(
+        navController = navController,
+        navActions = navActions
+    )
 }
