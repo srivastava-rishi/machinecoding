@@ -16,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.rsstudio.machinecodinground.presentation.screen.ImageLoadingLibrary
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,10 +52,15 @@ fun ScreenAContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Screen A",
-            modifier = Modifier.clickable {
-                openB()
+        ImageLoadingLibrary(
+            modifier = Modifier.size(400.dp),
+            url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKB-QWV5v34jxsPK97DiU5SZZthiilAlO-c63zZqcuUNSFiS4TYhBUNp8oJzJyioJ6ZjA&usqp=CAU",
+            placeHolder = {
+                Text(
+                    text = "Loading....",
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    fontSize = 244.sp
+                )
             }
         )
         Spacer(modifier = Modifier.size(24.dp))

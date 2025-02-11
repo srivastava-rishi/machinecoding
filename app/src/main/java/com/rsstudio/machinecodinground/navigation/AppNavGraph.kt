@@ -13,7 +13,7 @@ import com.rsstudio.machinecodinground.presentation.screen.reminderlist.Reminder
 fun AppNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String = AppScreen.ReminderListScreen.route,
+    startDestination: String = AppScreen.ScreenA.route,
     navActions: AppNavigationActions,
 ) {
     NavHost(
