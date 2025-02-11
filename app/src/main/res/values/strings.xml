@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MachineCodingRound</string>
+    <string name="no_data_found">No data found</string>
 </resources>

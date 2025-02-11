@@ -92,4 +92,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
+
+    // okhttp
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }

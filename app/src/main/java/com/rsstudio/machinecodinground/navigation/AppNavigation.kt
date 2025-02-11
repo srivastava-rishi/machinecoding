@@ -12,4 +12,4 @@ object AppArgs {
 sealed class AppScreen(val name: String, val route: String) {
     data object ScreenA : AppScreen("a", "a")
     data object ScreenB : AppScreen("b", "b")
-}
+    data object ReminderListScreen : AppScreen("reminderList", "reminderList")}

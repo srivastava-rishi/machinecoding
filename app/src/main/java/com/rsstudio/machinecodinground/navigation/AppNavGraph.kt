@@ -7,12 +7,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.rsstudio.machinecodinground.presentation.screen.a.ScreenA
 import com.rsstudio.machinecodinground.presentation.screen.b.ScreenB
+import com.rsstudio.machinecodinground.presentation.screen.reminderlist.ReminderListScreen
 
 @Composable
 fun AppNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String = AppScreen.ScreenA.route,
+    startDestination: String = AppScreen.ReminderListScreen.route,
     navActions: AppNavigationActions,
 ) {
     NavHost(
@@ -30,6 +31,11 @@ fun AppNavGraph(
 
         composable(route = AppScreen.ScreenB.route) {
             ScreenB()
+        }
+
+
+        composable(AppScreen.ReminderListScreen.route) {
+            ReminderListScreen()
         }
     }
 }

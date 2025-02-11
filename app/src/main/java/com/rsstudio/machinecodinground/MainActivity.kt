@@ -13,7 +13,10 @@ import androidx.navigation.compose.rememberNavController
 import com.rsstudio.machinecodinground.navigation.AppNavGraph
 import com.rsstudio.machinecodinground.navigation.AppNavigationActions
 import com.rsstudio.machinecodinground.presentation.theme.MachineCodingRoundTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
