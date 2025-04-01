@@ -1,0 +1,61 @@
+{
+  "name": "Sabila",
+  "age": "25",
+  "occupation": "developer",
+  "userImage": "https:/",
+  // wrong way
+  //  "showOffYourPersonalityId": "1",
+  //  "showOffYourPersonalityQuestion" : "auau",
+  //  "showOffYourPersonalityAnswer" : "joker",
+  // wrong way
+  //  "showOffYourPersonality" : {
+  //    "id": "1",
+  //    "question": "auau",
+  //    "answer": ""
+  //  }
+  "showOffYourPersonality": [
+    {
+      "id": "1",
+      "question": "auau",
+      "answer": ""
+    },
+    {
+      "id": "1",
+      "question": "auau",
+      "answer": ""
+    },
+    {
+      "id": "1",
+      "question": "auau",
+      "answer": ""
+    }
+  ]
+}
+
+
+
+{
+  "profileData": {
+    "name": "Sabila",
+    "age": "25",
+    "occupation": "developer",
+    "userImage": "https:/",
+    "showOffYourPersonality": [
+      {
+        "id": "1",
+        "question": "auau",
+        "answer": ""
+      },
+      {
+        "id": "1",
+        "question": "auau",
+        "answer": ""
+      },
+      {
+        "id": "1",
+        "question": "auau",
+        "answer": ""
+      }
+    ]
+  }
+}

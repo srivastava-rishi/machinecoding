@@ -53,7 +53,11 @@ fun ScreenAContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ImageLoadingLibrary(
-            modifier = Modifier.size(400.dp),
+            modifier = Modifier
+                .size(400.dp)
+                .clickable {
+                    openB()
+                },
             url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKB-QWV5v34jxsPK97DiU5SZZthiilAlO-c63zZqcuUNSFiS4TYhBUNp8oJzJyioJ6ZjA&usqp=CAU",
             placeHolder = {
                 Text(

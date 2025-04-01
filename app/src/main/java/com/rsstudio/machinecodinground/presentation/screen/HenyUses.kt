@@ -2,9 +2,12 @@ package com.rsstudio.machinecodinground.presentation.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -19,20 +22,29 @@ fun ImageLoadingLibrary(
     url: String,
     placeHolder: @Composable () -> Unit
 ) {
-
-    var data by remember {
-        mutableStateOf<ImageBitmap?>(null)
-    }
-    val hitIt = Heny.loadImage(
-        url = url,
-        onError = {
-        },
-        onSuccess = {
-            data = it.asImageBitmap()
+    var data by remember { mutableStateOf<ImageBitmap?>(null) }
+    val scope = rememberCoroutineScope()
+    DisposableEffect(url) {
+        Heny.loadImage(
+            url = url,
+            coroutineScope = scope,
+            onError = {
+                // Handle error (e.g., show a fallback image)
+            },
+            onSuccess = {
+                data = it.asImageBitmap()
+            }
+        )
+        onDispose {
+            // do thAT NECESSARY CALL
         }
-    )
+    }
     data?.let {
-        Image(bitmap = it, contentDescription = null)
+        Image(
+            modifier = modifier,
+            bitmap = it,
+            contentDescription = null
+        )
     } ?: placeHolder
 }
 

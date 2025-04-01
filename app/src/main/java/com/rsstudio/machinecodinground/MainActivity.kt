@@ -19,7 +19,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_Transparent)
         super.onCreate(savedInstanceState)
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+
         setContent {
             MachineCodingRoundTheme {
                 Surface(

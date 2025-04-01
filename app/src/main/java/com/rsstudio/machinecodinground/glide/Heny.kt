@@ -8,35 +8,52 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 
 object Heny {
-    fun loadImage(url: String, onSuccess: (Bitmap) -> Unit, onError: (Exception) -> Unit) {
-        val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-        scope.launch {
+    private val requestMap = ConcurrentHashMap<String, Call>()
+
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
+        .build()
+
+    fun loadImage(
+        url: String,
+        coroutineScope: CoroutineScope,
+        onSuccess: (Bitmap) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        requestMap[url]?.cancel()
+
+        val request = Request.Builder().url(url).build()
+        val call = client.newCall(request)
+        requestMap[url] = call // Track active request
+
+        coroutineScope.launch(Dispatchers.IO) {
             try {
-                val cachedBitmap = Cache.getImage(url)
-                if (cachedBitmap != null) {
-                    withContext(Dispatchers.Main) { onSuccess(cachedBitmap) }
-                } else {
-                    val bitmap = downloadBitmap(url)
-                    Cache.putImage(url, bitmap)
-                    withContext(Dispatchers.Main) {
-                        onSuccess(bitmap)
-                    }
-                }
+                val response = call.execute()
+                val inputStream = response.body?.byteStream() ?: throw IOException("Null InputStream")
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+                Cache.putImage(url, bitmap)
+                withContext(Dispatchers.Main) { onSuccess(bitmap) }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) { onError(e) }
+            } finally {
+                requestMap.remove(url) // Remove completed/cancelled requests
             }
         }
     }
 
-    private fun downloadBitmap(url: String): Bitmap {
-        val connection = URL(url).openConnection() as HttpURLConnection
-        connection.doInput = true
-        connection.connect()
-        val inputStream = connection.inputStream
-        return BitmapFactory.decodeStream(inputStream)
+    fun cancelRequest(url: String) {
+        requestMap[url]?.cancel()
+        requestMap.remove(url)
     }
 }
