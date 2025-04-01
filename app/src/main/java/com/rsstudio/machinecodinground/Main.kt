@@ -24,34 +24,33 @@ import java.lang.System.currentTimeMillis
  *
  **/
 
+val inFlightCancellingMechanism = mutableMapOf<String, Job>()
+
 fun main() {
     runBlocking {
-        val hm = mutableMapOf<String, Job>()
         runCatching {
-            val join = CoroutineScope(Dispatchers.IO).launch {
-                val loader = ImageLoader()
-                val request1 = Request(imageUrl = "https://1.image.link", ImageView())
-                val request2 = Request(imageUrl = "https://google.com", ImageView())
-                val a = launch { loader.load(request1) }
-                hm[request1.imageUrl] = a
-                val b = launch { loader.load(request2) }
-                hm[request2.imageUrl] = b
-                delay(20)
-                // cancel it
-                hm[request1.imageUrl]?.cancel()
-                println("Sending load request: $request1")
-            }
-            join.join()
+            val request1 = Request("https://youtube.com", ImageView())
+            val request2 = Request("https://google.com", ImageView())
+            val loader = ImageLoader()
+            loader.load(request1)
+            loader.load(request2)
+            inFlightCancellingMechanism[request1.imageUrl]?.join()
+            inFlightCancellingMechanism[request2.imageUrl]?.join()
         }
     }
 }
 
 class ImageLoader {
-    suspend fun load(request: Request) {
-        println("Got load request: $request")
-        val downloadImage = downloadBitmap(request)
-        request.imageView.setImageBitmap(decodeBitmap(downloadImage))
-        println("line no 41: ${request.imageView}")
+    private val scope = CoroutineScope(Dispatchers.IO)
+
+    fun load(request: Request) {
+        val job = scope.launch {
+            println("Got load request: $request")
+            val downloadImage = downloadBitmap(request)
+            request.imageView.setImageBitmap(decodeBitmap(downloadImage))
+            println("line no 41: ${request.imageView}")
+        }
+        inFlightCancellingMechanism[request.imageUrl] = job
     }
 
     private suspend fun downloadBitmap(request: Request): BitmapStream {
@@ -72,7 +71,7 @@ class ImageLoader {
     }
 
     fun cancelRequest(request: Request) {
-        TODO()
+        inFlightCancellingMechanism[request.imageUrl]?.cancel()
     }
 }
 
