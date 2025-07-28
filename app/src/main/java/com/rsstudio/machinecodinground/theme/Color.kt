@@ -1,4 +1,4 @@
-package com.rsstudio.machinecodinground.presentation.theme
+package com.rsstudio.machinecodinground.theme
 
 import androidx.compose.ui.graphics.Color
 
