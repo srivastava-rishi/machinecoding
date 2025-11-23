@@ -1,34 +1,30 @@
 package com.rsstudio.machinecodinground.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.rsstudio.machinecodinground.presentation.screen.a.ScreenA
-import com.rsstudio.machinecodinground.presentation.screen.b.ScreenB
+import com.rsstudio.machinecodinground.presentation.a.ScreenA
+import com.rsstudio.machinecodinground.presentation.b.ScreenB
+
 
 @Composable
 fun AppNavGraph(
-    modifier: Modifier = Modifier,
+    startDestination: String,
     navController: NavHostController,
-    startDestination: String = AppScreen.ScreenA.route,
-    navActions: AppNavigationActions,
+    onAction: AppNavAction
 ) {
     NavHost(
-        navController = navController,
         startDestination = startDestination,
-        modifier = modifier
+        navController = navController,
     ) {
-        composable(route = AppScreen.ScreenA.route) {
+        composable(AppScreen.ScreenA.route) {
             ScreenA(
-                opeScreenB = {
-                    navController.navigate(AppScreen.ScreenB.route)
-                }
+                onAction = onAction::navigateFromScreenA
             )
         }
 
-        composable(route = AppScreen.ScreenB.route) {
+        composable(AppScreen.ScreenB.route) { backStackEntry ->
             ScreenB()
         }
     }
